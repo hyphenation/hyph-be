@@ -1,0 +1,8 @@
+This is my attempt to generate hyphenation patterns to be used by *TeX.
+
+Work is based on hyphenation patterns for OpenOffice [1] v1.1 by
+Alex Buloichik <alex73mail@gmail.com> and Sviatlana Liasovich <xelj.gjkz@bk.ru>
+
+License is TBD
+
+[1] http://extensions.services.openoffice.org/en/project/dict-be-official
