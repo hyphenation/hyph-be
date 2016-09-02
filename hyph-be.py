@@ -104,7 +104,7 @@ def main():
     for c in C + K + A:
         print(".{}8".format(c))
         print("8{}.".format(c))
-    for (c1, c2) in product(C + A, repeat=2):
+    for (c1, c2) in product(C, repeat=2):
         print(".{}{}8".format(c1, c2))
         print("8{}{}.".format(c1, c2))
 
