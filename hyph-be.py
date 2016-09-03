@@ -101,7 +101,7 @@ def main():
     print("""\
 %   Зычныя літары не утвараюць склад, таму не пераносяцца,
 % калі стаяць у пачатку ці канцы слова.""")
-    for c in C + K + A:
+    for c in C + K:
         print(".{}8".format(c))
         print("8{}.".format(c))
     for (c1, c2) in product(C, repeat=2):
