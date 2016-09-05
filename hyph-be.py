@@ -27,6 +27,7 @@ V = list("аеёіоуыэюя")
 K = list("йў")
 A = list("'")
 M = list("ь")
+HC = list('джртчш') # hard-only consonants
 
 header = """% Created by: TBD
 % License: TBD
@@ -124,21 +125,37 @@ def main():
         print("д2{}".format(c))
 
     print("""\
-% Пры пераносе нельга:
-%   аддзяляць ад папярэдняй галоснай лiтары й i ў: сой-ка, бой-кi, май-стар, дай-сцi,
-% зай-мацца, праў-да, слоў-нiк, маў-чаць, заў-тра, праў-нук;
-%   аддзяляць мяккi знак i апостраф ад папярэдняй зычнай: буль-ба, прось-ба,
-% вазь-му, бур’-ян, сем’-яў, мыш’-як.
-% ** й ды ў ужываюцца выключна пасля галосных, а ь ды ' пасля зычных,
-% таму можна забарону пераносу зрабіть агульнай для усіх літар.
-%
+% Пры пераносе нельга аддзяляць ад папярэдняй галоснай лiтары й i ў.
 % й and ў should not be separated from a preceding vowel.
-% ь and ' should not be separated from a preceding consonant.
-% ** since й and ў can appear only after a vowel, and ь and ' can appear
-% only after a consonant, we can use a more general rule.
+%
+% сой-ка, бой-кi, май-стар, дай-сцi, зай-мацца, праў-да, слоў-нiк, маў-чаць,
+% заў-тра, праў-нук
+%
+% ** й ды ў ужываюцца выключна пасля галосных,
+% таму можна забарону пераносу зрабіть агульнай для усіх літар.
+% ** since й and ў can appear only after a vowel
+% we can use a more general rule.
 %""")
-    for c in M + K + A:
-        print("6{}1".format(c))
+    for k in K:
+        print("6{}1".format(k))
+
+    print("""\
+% Пры пераносе нельга  аддзяляць мяккi знак i апостраф ад папярэдняй зычнай.
+% ь and ' should not be separated from a preceding consonant.
+%
+% буль-ба, прось-ба, вазь-му, бур’-ян, сем’-яў, мыш’-як
+%
+% ** Зычная з мяккім знакам ці апострафам з'яўляюцца часткай папярэдняга складу.
+% ** A consonant and following ь or ' are part of a previous syllable.
+%""")
+    for s in A + M:
+        for c in C:
+            if s == 'ь' and c in HC:
+                # немагчымае спалучэнне
+                # impossible combination
+                print("% {}{} % impossible".format(c, s))
+            else:
+                print("6{}{}1".format(c, s))
 
     print("""%
 % Зычныя літары не утвараюць склад, таму не пераносяцца,
