@@ -150,7 +150,7 @@ def main():
 %""")
     for s in A + M:
         for c in C:
-            if s == 'ь' and c in HC:
+            if (s in M) and (c in HC):
                 # немагчымае спалучэнне
                 # impossible combination
                 print("% {}{} % impossible".format(c, s))
@@ -166,9 +166,30 @@ def main():
     for c in C + K:
         print(".{}8".format(c))
         print("8{}.".format(c))
-    for (c1, c2) in product(C, repeat=2):
-        print(".{}{}8".format(c1, c2))
-        print("8{}{}.".format(c1, c2))
+    for (c1, c2) in product(C, C + M + A):
+        if ((c1 in HC) and (c2 in M)):
+            # Skip hard-only consonants followed by a soft sign
+            print("% {}{}".format(c1, c2))
+        else:
+            print(".{}{}8".format(c1, c2))
+            if c2 in A:
+                # Quote can't be the last symbol in a word
+                print("% {}{}.".format(c1, c2))
+            else:
+                print("8{}{}.".format(c1, c2))
+    for (c1, c2, c3) in product(C, C + M, C + M + A):
+        if ((c1 in HC) and (c2 in M)) or ((c2 in HC) and (c3 in M)) \
+           or ((c2 in M) and (c3 in (M + A))):
+            # Skip hard-only consonants followed by a soft sign
+            # or combinations with ьь or ь'
+            print("% {}{}{}".format(c1, c2, c3))
+        else:
+            print(".{}{}{}8".format(c1, c2, c3))
+            if c3 in A:
+                # Quote can't be the last symbol in a word
+                print("% {}{}{}.".format(c1, c2, c3))
+            else:
+                print("8{}{}{}.".format(c1, c2, c3))
 
     print("""%
 % Стылістычна лепш не аддзяляць прыстаўку не- ад слова. Інакш, гэта можа
@@ -204,9 +225,6 @@ def main():
 % выключэнні з вышэй  апісаных правілаў
 .ад8зін
 тэ8мбр.
-8льш.
-8сць.
-8дзь.
 .дву8х3
 .тро8х3
 слова7ў8твар
