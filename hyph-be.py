@@ -45,7 +45,6 @@ header = """% Created by: TBD
 % Based on rules approved by the law No 420-3 dated 23 July 2008
 % About Belarusian orthography and punctuation
 %
-\message{Loading hyphenation patterns for Belarusian}
 \patterns{"""
 
 footer = "}"
