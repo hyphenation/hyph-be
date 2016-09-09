@@ -10,3 +10,7 @@ test-hyph-be.pdf: hyph-be.tex
 
 hyph-be.tex: hyph-be.py
 		./$< > $@
+
+modules:
+		git submodule init
+		git submodule update
