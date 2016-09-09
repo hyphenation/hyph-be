@@ -1,0 +1,12 @@
+Package: texlive-hyph-belarusian
+Source: texlive-hyph
+Version: 2014.20141024-1
+Architecture: all
+Maintainer: Maksim Salau <maksim.salau@gmail.com>
+Depends: texlive-base (>= 2014), dpkg (>= 1.14.18), tex-common (>= 3), texlive-latex-base (>= 2014), texlive-binaries (>= 2014.20140512.33982)
+Breaks: texlive-base (<< 2014)
+Section: tex
+Priority: optional
+Homepage: http://www.tug.org/texlive/
+Description: TeX Live: Belarusian
+ Support for hyphenation of Belarusian

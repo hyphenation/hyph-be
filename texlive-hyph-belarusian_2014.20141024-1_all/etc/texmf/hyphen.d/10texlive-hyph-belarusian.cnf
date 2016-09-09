@@ -1,0 +1,2 @@
+% 10texlive-hyph-belarusian.cnf
+name=belarusian file=loadhyph-be.tex patterns=hyph-be.pat.txt lefthyphenmin=2 righthyphenmin=2 exceptions=

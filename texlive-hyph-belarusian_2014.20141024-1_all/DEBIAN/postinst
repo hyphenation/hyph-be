@@ -1,0 +1,146 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installtex
+##
+## postinst-tex
+##
+## postinst snippets for everything TeX related (mktlsr, hyphenation
+## patterns, formats, font maps)
+##
+## Authors:
+##       Florent Rougon <f.rougon@free.fr>
+##       Norbert Preining <preining@logic.at>
+##
+#
+
+TEXMFTREES="/usr/share/texmf /var/lib/texmf"
+FULLTEXMFTREES="$TEXMFTREES /usr/share/texlive/texmf-dist"
+
+#
+#
+dhit_texlive_binaries_configured ()
+{
+    stat=$(dpkg-query -W -f='${Status}' texlive-binaries 2>/dev/null || true)
+    case "$stat" in
+        "install ok installed")
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
+dhit_update_lsr_files ()
+{
+    tempfile=$(mktemp -p /tmp mktexlsr.XXXXXXXX)
+    printf "Running mktexlsr. This may take some time... "
+    if mktexlsr $* > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "mktexlsr $* failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+dhit_build_hyphen_format_if_format_exists ()
+{
+    v=$(kpsewhich -var-value TEXMFSYSVAR)
+    c=$(kpsewhich -var-value TEXMFSYSCONFIG)
+    TEXMFVAR="$v"
+    TEXMFCONFIG="$c"
+    export TEXMFVAR TEXMFCONFIG
+    fmtcnffile=$(kpsewhich --format='web2c files' fmtutil.cnf)
+    X=$(grep "^[[:space:]]*$1[[:space:]]" $fmtcnffile || true)
+    if [ -n "$X" ] ; then
+        dhit_build_format --byhyphen "$2"
+    fi
+}
+
+dhit_build_format ()
+{
+
+    tempfile=$(mktemp -p /tmp fmtutil.XXXXXXXX)
+    printf "Building format(s) $*.\n\tThis may take some time... "
+    if fmtutil-sys --no-error-if-no-engine=luajittex "$@" > $tempfile 2>&1 ; then
+        rm -f $tempfile
+        echo "done."
+    else
+        exec >&2
+        echo
+        echo "fmtutil-sys failed. Output has been stored in"
+        echo "$tempfile"
+        echo "Please include this file if you report a bug."
+        echo
+        exit 1
+    fi
+}
+
+
+case "$1" in
+    configure|abort-upgrade|abort-remove|abort-deconfigure)
+        update-updmap --quiet
+        update-language
+        update-fmtutil
+        if dhit_texlive_binaries_configured; then
+            #
+            do_lsr=0
+            for i in map hyphen format lsrfull ; do
+                if [ "$i" = lsrfull ] ; then
+                    TEXMFTREES=$FULLTEXMFTREES
+                fi
+                if [ "$i" = allformats ] ; then
+                    do_lsr=1
+                fi
+                if [ "$i" = format ] ; then
+                    do_lsr=1
+                fi
+            done
+            if [ $do_lsr = 1 ] ; then
+                if which mktexlsr >/dev/null; then
+                    dhit_update_lsr_files $TEXMFTREES
+                fi
+            fi
+            for i in map hyphen format lsrfull ; do
+                if [ "$i" = lsr ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsr
+                    fi
+                fi
+                if [ "$i" = lsrfull ] ; then
+                    if [ $do_lsr = 0 ] ; then
+                        update-texmf-config lsrfull
+                    fi
+                fi
+                if [ "$i" = map ] ; then
+                    update-texmf-config map
+                fi
+                if [ "$i" = allformats ] ; then
+                    dhit_build_format --all
+                fi
+                if [ "$i" = format ] ; then
+                    for fmt in 10texlive-lang-cyrillic ; do
+                        if [ -r "/etc/texmf/fmt.d/$fmt.cnf" ] ; then
+                            dhit_build_format --all --cnffile "/etc/texmf/fmt.d/$fmt.cnf"
+                        else
+                            echo "config file /etc/texmf/fmt.d/$fmt.cnf not available"
+                        fi
+                    done
+                fi
+                if [ "$i" = hyphen ] ; then
+                    update-texmf-config hyphen
+                fi
+            done
+        fi
+    ;;
+
+esac
+
+# End automatically added section

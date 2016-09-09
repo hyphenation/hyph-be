@@ -1,0 +1,92 @@
+#!/bin/sh
+set -e
+# Automatically added by dh_installtex
+##
+## postrm-tex
+##
+## postrm snippets for registering hyphenation patterns, font maps, and formats
+##
+## Authors:
+##       Florent Rougon <f.rougon@free.fr>
+##       Norbert Preining <preining@logic.at>
+##
+#
+
+dhit_call_update_texmf_config ()
+{
+    if which update-texmf-config >/dev/null; then
+        update-texmf-config $*
+    else
+        echo "update-texmf-config not present: is tex-common installed?" >&2
+    fi
+}
+
+dhit_check_run_without_errors ()
+{
+    silent=0
+    if [ "$1" = "-silent" ] ; then
+        silent=1
+        shift
+    fi
+    if which "$1" >/dev/null; then
+        tempfile=$(mktemp -p /tmp checkrun.XXXXXXXX)
+        if [ $silent = 0 ] ; then
+            printf "Running '$*'.\nThis may take some time..."
+        fi
+        set +e
+        if "$@" > $tempfile 2>&1 ; then
+            rm -f $tempfile
+            [ $silent = 0 ] && echo " done."
+        else
+            echo
+            echo "$* failed. Output has been stored in"
+            echo "$tempfile"
+            echo "If tex-common is not configured you can ignore this error" \
+                 "message!"
+            echo "Otherwise, please include this file if you report a bug."
+            echo
+        fi
+        set -e
+    fi
+
+    return 0
+}
+
+
+case "$1" in
+    remove|disappear)
+        dhit_check_run_without_errors -silent update-updmap --quiet
+        dhit_check_run_without_errors -silent update-language
+        dhit_check_run_without_errors -silent update-fmtutil
+        for i in map hyphen format lsrfull ; do
+            if [ "$i" = lsr ] ; then
+                dhit_call_update_texmf_config lsr
+            fi
+            if [ "$i" = lsrfull ] ; then
+                dhit_call_update_texmf_config lsrfull
+            fi
+            if [ "$i" = map ] ; then
+                dhit_call_update_texmf_config map
+            fi
+            if [ "$i" = allformats ] ; then
+                for fmt in  ; do
+                    rm -f /var/lib/texmf/web2c/$fmt.*
+                done
+            fi
+            if [ "$i" = format ] ; then
+                for fmt in  ; do
+                    rm -f /var/lib/texmf/web2c/$fmt.*
+                done
+            fi
+            if [ "$i" = hyphen ] ; then
+                dhit_call_update_texmf_config hyphen
+            fi
+        done
+    ;;
+
+    purge|upgrade|failed-upgrade|abort-upgrade|abort-install)
+    ;;
+
+esac
+
+# End automatically added section
