@@ -217,7 +217,7 @@ def main():
             # Assuming we have prefix in form of (cv)+c
             p = p[:-1] + '2' + p[-1:]
         for c in C:
-            print(".{}3{}".format(p, c))
+            print(".{}3{}6".format(p, c))
 
     print(
 """% Перанос у словах, якія ўяўляюць сабой
