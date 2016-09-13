@@ -1,12 +1,12 @@
-all: test-hyph-be.pdf
+all: test-hyph-be.fmt
 
-%.pdf: %.tex
+%.fmt: %.tex
 		xetex -halt-on-error -file-line-error -ini -etex $<
 
 clean:
 		rm -f *.aux *.pdf *.log *~ *.fmt
 
-test-hyph-be.pdf: hyph-be.tex
+test-hyph-be.fmt: hyph-be.tex
 
 hyph-be.tex: hyph-be.py
 		./$< > $@
