@@ -29,8 +29,12 @@ A = list("'")
 M = list("ь")
 HC = list('джртчш') # hard-only consonants
 
-header = """% Created by: TBD
-% License: TBD
+header = """%
+% Copyright (c) 2009 Aleś Bułojčyk <alex73mail@gmail.com>
+% Copyright (c) 2009 Sviatlana Liasovich <xelj.gjkz@bk.ru>
+% Copyright (c) 2016 Maksim Salau <maksim.salau@gmail.com>
+%
+% License: LGPL
 %
 % Створана адпаведна правілаў, зацверджаных законам
 % ад 23 лiпеня 2008 г. No 420-З
