@@ -14,6 +14,7 @@ pushd ./hyph-utf8-belarusian
 
 mkdir -p ../texlive-hyph-belarusian_2014.20141024-1_all/usr/share/texlive/texmf-dist/tex/generic/hyph-utf8/patterns/txt/
 mkdir -p ../texlive-hyph-belarusian_2014.20141024-1_all/usr/share/texlive/texmf-dist/tex/generic/hyph-utf8/patterns/tex/
+mkdir -p ../texlive-hyph-belarusian_2014.20141024-1_all/usr/share/texlive/texmf-dist/tex/generic/hyph-utf8/patterns/ptex/
 mkdir -p ../texlive-hyph-belarusian_2014.20141024-1_all/usr/share/texlive/texmf-dist/tex/generic/hyph-utf8/patterns/quote/
 mkdir -p ../texlive-hyph-belarusian_2014.20141024-1_all/usr/share/texlive/texmf-dist/tex/generic/hyph-utf8/loadhyph/
 
