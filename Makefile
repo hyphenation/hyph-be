@@ -1,3 +1,5 @@
+.PHONY: all clean modules deb test-doc
+
 all: test-hyph-be.fmt
 
 %.fmt: %.tex
@@ -19,3 +21,6 @@ deb: texlive-hyph-belarusian_2014.20141024-1_all.deb
 
 texlive-hyph-belarusian_2014.20141024-1_all.deb: hyph-be.tex
 		./build-deb.sh
+
+test-doc:
+		make -C test-doc
