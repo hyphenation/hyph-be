@@ -57,6 +57,15 @@ def main():
     print(header)
 
     print("""%
+% Калі ў слове ёсць злучок, перанос магчымы пасля злучка,
+% а кожная частка пераносіцца нібыта з'яўляецца асобным словам.
+%
+% A word that has a dash can hyphenated after the dash,
+% both parts of the word are hyphenated as if they are separate words.
+%""")
+    print("8-1")
+
+    print("""%
 % З аднаго радка на другi слова пераносiцца па складах.
 % Words are hyphenated by syllables.
 %
@@ -107,7 +116,7 @@ def main():
 % аса-ка, лi-нiя, ра-дыё, еха-лi, па-коi
 %""")
     for v in V:
-        print(".{0}8 8{0}.".format(v))
+        print(".{0}8 8{0}. -{0}8 8{0}-".format(v))
 
     print("""%
 % Пры пераносе нельга разбiваць пераносам спалучэннi лiтар дж i дз,
@@ -166,7 +175,7 @@ def main():
 % consonants in the beginning or ending of a word.
 %""")
     for c in C + K:
-        print(".{0}8 8{0}.".format(c))
+        print(".{0}8 8{0}. -{0}8 8{0}-".format(c))
     for (c1, c2) in product(C, C + M + A):
         if ((c1 in HC) and (c2 in M)):
             # Skip hard-only consonants followed by a soft sign
@@ -178,6 +187,7 @@ def main():
                 pass
             else:
                 rule = rule + " 8{}{}.".format(c1, c2)
+            rule = rule + " " + rule.replace(".", "-")
             print(rule)
     for (c1, c2, c3) in product(C, C + M, C + M + A):
         if ((c1 in HC) and (c2 in M)) or ((c2 in HC) and (c3 in M)) \
@@ -192,6 +202,7 @@ def main():
                 pass
             else:
                 rule = rule + " 8{}{}{}.".format(c1, c2, c3)
+            rule = rule + " " + rule.replace(".", "-")
             print(rule)
 
     print("""%
@@ -201,8 +212,8 @@ def main():
 % It is better not to separate prefix не- from a word.
 % Alternatively this can affect understanding.
 %
-.не8
-.ня8""")
+.не8 -не8
+.ня8 -ня8""")
 
     print("""%
 % Перанос пасля некаторых прыставак толькі для слоў пачынаючыхся з зычных.
@@ -221,11 +232,15 @@ def main():
             # Assuming we have prefix in form of (cv)+c
             p = p[:-1] + '2' + p[-1:]
         for c in C:
-            print(".{}3{}6".format(p, c))
+            print(".{0}3{1}6 -{0}3{1}6".format(p, c))
 
-    print(
-"""% Перанос у словах, якія ўяўляюць сабой
-% выключэнні з вышэй  апісаных правілаў
+    exceptions = \
+"""%
+% Перанос у словах, якія ўяўляюць сабой
+% выключэнні з вышэй апісаных правілаў
+%
+% Exception from the rules specified above
+%
 .ад8зін
 тэ8мбр.
 .дву8х3
@@ -247,7 +262,12 @@ def main():
 крова3ў8твар
 за3ц8вярдз
 .па3г8лядз
-на5д8вор""")
+на5д8вор"""
+
+    for line in exceptions.split("\n"):
+        if not (line.startswith("%") or "." not in line):
+            line = line + " " + line.replace(".", "-")
+        print(line)
 
     print(footer)
     print()
