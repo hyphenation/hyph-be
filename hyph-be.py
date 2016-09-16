@@ -107,8 +107,7 @@ def main():
 % аса-ка, лi-нiя, ра-дыё, еха-лi, па-коi
 %""")
     for v in V:
-        print(".{}8".format(v))
-        print("8{}.".format(v))
+        print(".{0}8 8{0}.".format(v))
 
     print("""%
 % Пры пераносе нельга разбiваць пераносам спалучэннi лiтар дж i дз,
@@ -167,19 +166,19 @@ def main():
 % consonants in the beginning or ending of a word.
 %""")
     for c in C + K:
-        print(".{}8".format(c))
-        print("8{}.".format(c))
+        print(".{0}8 8{0}.".format(c))
     for (c1, c2) in product(C, C + M + A):
         if ((c1 in HC) and (c2 in M)):
             # Skip hard-only consonants followed by a soft sign
             print("% {}{}".format(c1, c2))
         else:
-            print(".{}{}8".format(c1, c2))
+            rule = ".{}{}8".format(c1, c2)
             if c2 in A:
                 # Quote can't be the last symbol in a word
-                print("% {}{}.".format(c1, c2))
+                pass
             else:
-                print("8{}{}.".format(c1, c2))
+                rule = rule + " 8{}{}.".format(c1, c2)
+            print(rule)
     for (c1, c2, c3) in product(C, C + M, C + M + A):
         if ((c1 in HC) and (c2 in M)) or ((c2 in HC) and (c3 in M)) \
            or ((c2 in M) and (c3 in (M + A))):
@@ -187,12 +186,13 @@ def main():
             # or combinations with ьь or ь'
             print("% {}{}{}".format(c1, c2, c3))
         else:
-            print(".{}{}{}8".format(c1, c2, c3))
+            rule = ".{}{}{}8".format(c1, c2, c3)
             if c3 in A:
                 # Quote can't be the last symbol in a word
-                print("% {}{}{}.".format(c1, c2, c3))
+                pass
             else:
-                print("8{}{}{}.".format(c1, c2, c3))
+                rule = rule + " 8{}{}{}.".format(c1, c2, c3)
+            print(rule)
 
     print("""%
 % Стылістычна лепш не аддзяляць прыстаўку не- ад слова. Інакш, гэта можа
