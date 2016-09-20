@@ -96,7 +96,7 @@ PATTERNS = [
     '.па7д8зеі',
     '.па7д8зею',
     '.падзеш.', #?
-    '.пад7зол', #?
+    '.падзол', #?
     '.пад7зор',
     '.пад7зыва',
     '.па7д8зьм',
@@ -144,10 +144,10 @@ def main():
     # Remove words that match patterns
     root = 0
     prefix = 0
-    unknown = 0
+    todo = 0
     pattern_prefix = 0
     pattern_root = 0
-    pattern_unknown = 0
+    pattern_todo = 0
     rules = {}
     for pattern in PATTERNS:
         if "д8з" in pattern or "д8ж" in pattern:
@@ -155,7 +155,7 @@ def main():
         elif "д7з" in pattern or "д7ж" in pattern:
             pattern_prefix = pattern_prefix + 1
         else:
-            pattern_unknown = pattern_unknown + 1
+            pattern_todo = pattern_todo + 1
 
         p1 = start.sub("^", pattern)
         p2 = end.sub("$", p1)
@@ -173,7 +173,7 @@ def main():
                     prefix = prefix + 1
                     word = word.replace("д", "д-", 1)
                 else:
-                    unknown = unknown + 1
+                    todo = todo + 1
 
                 if pattern not in rules:
                     rules[pattern] = []
@@ -198,13 +198,26 @@ def main():
     else:
         print("Congratulations! All words are examined!")
         #print("{} patterns cover {} words".format(len(PATTERNS), words_num))
-        print("Words: prefix = {:4}, root = {:4}, unknown = {:4}".format(prefix, root, unknown))
-        print("Rules: prefix = {:4}, root = {:4}, unknown = {:4}".format(pattern_prefix, pattern_root, pattern_unknown))
+        print("Words: prefix = {:4}, root = {:4}, todo = {:4}".format(prefix, root, todo))
+        print("Rules: prefix = {:4}, root = {:4}, todo = {:4}".format(pattern_prefix, pattern_root, pattern_todo))
 
     print()
     print()
-    for pattern in rules:
-        print("{}: {}".format(pattern, " ".join(rules[pattern])))
+    todo_list = []
+    for pattern in sorted(rules):
+        if "7" not in pattern and "8" not in pattern:
+            todo_list.append(pattern)
+        else:
+            print("{}: {}".format(pattern, " ".join(rules[pattern])))
+
+    if todo_list:
+        print()
+        print("**************")
+        print("**** TODO ****")
+        print("**************")
+        print()
+        for pattern in todo_list:
+            print("{}: {}".format(pattern, " ".join(rules[pattern])))
 
 if __name__ == "__main__":
     main()
