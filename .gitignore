@@ -1,10 +1,3 @@
 *~
-*.aux
-*.log
-*.pdf
-*.fmt
-*.deb
-/texlive-hyph-belarusian_2014.20141024-1_all/usr/
-word-list.txt
 __pycache__
 *.py[co]

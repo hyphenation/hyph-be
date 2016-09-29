@@ -1,6 +1,3 @@
 [submodule "hydra"]
 	path = hydra
 	url = git@github.com:hyphenation/hydra.git
-[submodule "hyph-utf8-belarusian"]
-	path = hyph-utf8-belarusian
-	url = git@github.com:msalau/hyph-utf8-belarusian.git

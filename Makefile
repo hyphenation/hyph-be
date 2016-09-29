@@ -18,50 +18,25 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 # OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-.PHONY: all clean modules deb test test-doc test-doc-clean
+.PHONY: all dist-clean modules
 
 all: hyph-be.tex dz.txt
 
-%.fmt: %.tex
-		xetex -halt-on-error -file-line-error -ini -etex $<
-
-clean: test-doc-clean
-		rm -f *.aux *.pdf *.log *~ *.fmt
-
-dist-clean: clean
-		rm -f hyph-be.tex 3-letter-rules.txt word-list.txt list-dz.txt
-
-test-hyph-be.fmt: hyph-be.tex
+dist-clean:
+		rm -f hyph-be.tex 3-letter-rules.txt dz.txt
 
 hyph-be.tex: hyph-be.py 3-letter-rules.txt dz.py
-		./$< > $@
+		./hyph-be.py > $@
 
 dz.txt: dz.py word-list.txt
-		./$< word-list.txt > $@
-
-word-list.txt.bz2: /usr/share/hunspell/be_BY.dic /usr/share/hunspell/be_BY.aff
-		unmunch $^ 2>/dev/null | bzip2 -9 >$@
-
-word-list.txt: word-list.txt.bz2
-		bzcat $< > $@
+		./dz.py word-list.txt > $@
 
 3-letter-rules.txt: 3-letter-rules.py word-list.txt
 		./$< word-list.txt >$@
 
+word-list.txt: /usr/share/hunspell/be_BY.dic /usr/share/hunspell/be_BY.aff
+		unmunch $^ >$@ 2>/dev/null
+
 modules:
 		git submodule init
 		git submodule update
-
-deb: texlive-hyph-belarusian_2014.20141024-1_all.deb
-
-texlive-hyph-belarusian_2014.20141024-1_all.deb: hyph-be.tex
-		./build-deb.sh
-
-test: test-hyph-be.fmt
-		./showconflicts.rb
-
-test-doc:
-		make -C test-doc
-
-test-doc-clean:
-		make -C test-doc clean
