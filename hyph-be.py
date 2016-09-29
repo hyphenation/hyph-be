@@ -146,13 +146,6 @@ def main():
 % Combinations дж and дз shouldn't be split if they form a single sound.
 %
 % ура-джай, са-джаць, ра-дзi-ма, ха-дзiць
-%
-% Спалучэннi дж i дз можна разбiваць пераносам, калi д адносiцца да прыстаўкi,
-% а з, ж – да кораня:
-% These combinations can be split if д belongs to a prefix
-% and ж or з to the root of a word.
-%
-% пад-жары, ад-жаць, пад-земны, ад-значыць
 %""")
     for c in "жз":
         print("д2{}".format(c))
@@ -251,7 +244,23 @@ def main():
             # Assuming we have prefix in form of (cv)+c
             p = p[:-1] + '2' + p[-1:]
         for c in C:
-            print(".{0}3{1}6 -{0}3{1}6".format(p, c))
+            if p[-1] == "д" and c in "жз":
+                print("% .{0}{1}".format(p, c))
+            else:
+                print(".{0}3{1}6 -{0}3{1}6".format(p, c))
+
+    import dz
+    print("""%
+% Спалучэннi дж i дз можна разбiваць пераносам, калi д адносiцца да прыстаўкi,
+% а з, ж – да кораня:
+% дж and дз can be split if д belongs to a prefix
+% and ж or з to the root of a word.
+%
+% пад-жары, ад-жаць, пад-земны, ад-значыць
+%""")
+    patterns = filter(lambda p: "д7ж" in p or "д7з" in p, dz.PATTERNS)
+    patterns = map(lambda p: p + " " + p.replace(".", "-", 1), patterns)
+    print("\n".join(patterns))
 
     exceptions = \
 """%
@@ -260,7 +269,6 @@ def main():
 %
 % Exception from the rules specified above
 %
-.ад8зін
 тэ8мбр.
 .дву8х3
 .тро8х3
@@ -269,13 +277,10 @@ def main():
 віда1з8мян
 віда1з8мен
 за1п8люшч
-.па5д8зял
-.па5д8зел
 вё8рст
 раз5г8ляд
 раз5г8лед
 зло7ў8жыв
-.па5д8зяк
 .вы1к8люч
 .шма8т1
 крова3ў8твар

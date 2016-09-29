@@ -20,7 +20,7 @@
 
 .PHONY: all clean modules deb test test-doc test-doc-clean
 
-all: hyph-be.tex list-dz.txt
+all: hyph-be.tex dz.txt
 
 %.fmt: %.tex
 		xetex -halt-on-error -file-line-error -ini -etex $<
@@ -33,10 +33,10 @@ dist-clean: clean
 
 test-hyph-be.fmt: hyph-be.tex
 
-hyph-be.tex: hyph-be.py 3-letter-rules.txt
+hyph-be.tex: hyph-be.py 3-letter-rules.txt dz.py
 		./$< > $@
 
-list-dz.txt: list-dz.py word-list.txt
+dz.txt: dz.py word-list.txt
 		./$< word-list.txt > $@
 
 word-list.txt.bz2: /usr/share/hunspell/be_BY.dic /usr/share/hunspell/be_BY.aff
